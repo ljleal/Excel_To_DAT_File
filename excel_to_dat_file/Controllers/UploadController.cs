@@ -70,37 +70,6 @@ namespace excel_to_dat_file.Controllers
 
                 var values = new string[expectedColumnCount];
 
-                //for (int c = 1; c <= expectedColumnCount; c++)
-                //{
-                //    var cell = row.Cell(c);
-                //    int columnNumber = cell.Address.ColumnNumber;
-
-                //    if (columnNumber > 8 && columnNumber < 12 && r != lastRow)
-                //    {
-                //        string raw = cell.GetValue<string>() ?? string.Empty;
-                //        raw = raw.Replace("\r", " ")
-                //                 .Replace("\n", " ")
-                //                 .Trim();
-
-                //        values[c - 1] = $"\"{raw}\"";
-                //    }
-                //    else
-                //    {
-                //        string value;
-
-                //        if (cell.DataType == XLDataType.DateTime)
-                //            value = cell.GetDateTime().ToString("MM/dd/yyyy");
-                //        else if (cell.DataType == XLDataType.Number)
-                //            value = cell.GetDouble().ToString("0.00");
-                //        else
-                //            value = cell.GetValue<string>() ?? string.Empty;
-
-                //        values[c - 1] = value
-                //            .Replace("\r", " ")
-                //            .Replace("\n", " ")
-                //            .Trim();
-                //    }
-                //}
                 for (int c = 1; c <= expectedColumnCount; c++)
                 {
                     var cell = row.Cell(c);
