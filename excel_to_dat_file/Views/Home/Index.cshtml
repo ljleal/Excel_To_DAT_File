@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Excel to DAT Upload";
+}
+
+<link rel="stylesheet" href="~/css/excel-upload.css" />
+
+<div class="upload-wrapper">
+
+    <h2 class="page-title">Excel to DAT Converter</h2>
+
+    <form asp-controller="Upload" asp-action="ExcelToDatV2" method="post" enctype="multipart/form-data" class="upload-container" onsubmit="return validateFile();">
+
+        <div class="file-row">
+            <span id="fileName" class="filename">No file selected</span>
+
+            <label class="file-btn">
+                Choose File
+                <input type="file" id="fileInput" name="file" accept=".xlsx" hidden onchange="onFileSelected(this)" />
+            </label>
+        </div>
+
+        <span id="fileError" class="error-text"></span>
+
+     @*    <div class="options">
+            <input type="checkbox" name="hasHeader" checked />
+            <label>First row contains headers</label>
+        </div> *@
+
+        <button type="submit" class="upload-btn">
+            Upload and Convert
+        </button>
+
+    </form>
+</div>
+
+<script>
+    function onFileSelected(input) {
+        const fileName = input.files.length > 0
+            ? input.files[0].name
+            : 'No file selected';
+
+        document.getElementById('fileName').innerText = fileName;
+        document.getElementById('fileError').innerText = '';
+    }
+
+    function validateFile() {
+        const fileInput = document.getElementById('fileInput');
+
+        if (!fileInput.files || fileInput.files.length === 0) {
+            document.getElementById('fileError').innerText =
+                'Please select an Excel (.xlsx) file before uploading.';
+            return false;
+        }
+
+        return true;
+    }
+</script>
