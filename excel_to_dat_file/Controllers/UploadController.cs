@@ -11,7 +11,6 @@ namespace excel_to_dat_file.Controllers
             return View();
         }
 
-
         [HttpPost]
         [RequestSizeLimit(100_000_000)] // 100 MB
         public async Task<IActionResult> ExcelToDat(IFormFile file, bool hasHeader = true)
@@ -145,7 +144,7 @@ namespace excel_to_dat_file.Controllers
 
             var sb = new StringBuilder();
 
-            // ===== READ HEADER (Row 2) =====
+            // Read Header (Row 2)
             var headerRow = worksheet.Row(2);
 
             string recordType = headerRow.Cell(1).GetValue<string>().Trim();
@@ -166,7 +165,7 @@ namespace excel_to_dat_file.Controllers
             // Prepare totals (adjust number of totals depending on your columns)
             var totals = new List<decimal>();
 
-            // ===== prepare totals only for amount columns =====
+            // prepare totals only for amount columns
             var amountTotals = new Dictionary<int, decimal>();
 
             for (int r = startRow; r <= lastRow; r++)
@@ -196,7 +195,7 @@ namespace excel_to_dat_file.Controllers
                     value = value.Replace("\r", " ").Replace("\n", " ").Trim();
                     values.Add(isQuotedColumn ? $"\"{value}\"" : value);
 
-                    // === accumulate only amount columns ===
+                    // accumulate only amount columns 
                     if (cell.DataType == XLDataType.Number && columnNumber >= 8) // adjust start col
                     {
                         if (!amountTotals.ContainsKey(columnNumber))
@@ -209,7 +208,7 @@ namespace excel_to_dat_file.Controllers
                 sb.AppendLine(string.Join(",", values));
             }
 
-            //BUILD C1 LINE 
+            //Created C1 LINE 
             var c1Values = new List<string>
                 {
                     "C1",
