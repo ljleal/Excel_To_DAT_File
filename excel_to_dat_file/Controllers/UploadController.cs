@@ -185,12 +185,22 @@ namespace excel_to_dat_file.Controllers
 
                     bool isQuotedColumn = columnNumber >= 4 && columnNumber <= 6;
 
-                    string value = cell.DataType switch
+                    string value;
+
+                    // FIX: Column A, start at row 4 → whole number text (1.00 → 1)
+                    if (columnNumber == 1 && row.RowNumber() >= 4 && cell.DataType == XLDataType.Number)
                     {
-                        XLDataType.DateTime => cell.GetDateTime().ToString("MM/dd/yyyy"),
-                        XLDataType.Number => cell.GetDouble().ToString("0.00"),
-                        _ => cell.GetValue<string>() ?? string.Empty
-                    };
+                        value = Convert.ToInt64(cell.GetDouble()).ToString();
+                    }
+                    else
+                    {
+                        value = cell.DataType switch
+                        {
+                            XLDataType.DateTime => cell.GetDateTime().ToString("MM/dd/yyyy"),
+                            XLDataType.Number => cell.GetDouble().ToString("0.00"),
+                            _ => cell.GetValue<string>() ?? string.Empty
+                        };
+                    }
 
                     value = value.Replace("\r", " ").Replace("\n", " ").Trim();
                     values.Add(isQuotedColumn ? $"\"{value}\"" : value);
@@ -204,6 +214,7 @@ namespace excel_to_dat_file.Controllers
                         amountTotals[columnNumber] += (decimal)cell.GetDouble();
                     }
                 }
+
 
                 sb.AppendLine(string.Join(",", values));
             }
